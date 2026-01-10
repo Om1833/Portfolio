@@ -1,0 +1,224 @@
+﻿node.exe : ΓÜá 
+Warning: Next.js 
+inferred your 
+workspace root, but 
+it may not be 
+correct.
+At line:1 char:1
++ & "C:\Program Files
+\nodejs/node.exe" "C:
+\Users\ompat\AppData\
+Roaming\ ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (ΓÜá War   
+ ning: Ne...not b    
+e correct.:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+ We detected 
+multiple lockfiles 
+and selected the 
+directory of O:\portf
+olio\package-lock.jso
+n as the root 
+directory.
+ To silence this 
+warning, set 
+`turbopack.root` in 
+your Next.js config, 
+or consider removing 
+one of the lockfiles 
+if it's not needed.
+   See https://nextjs
+.org/docs/app/api-ref
+erence/config/next-co
+nfig-js/turbopack#roo
+t-directory for more 
+information.
+ Detected additional 
+lockfiles: 
+   * O:\portfolio\Por
+tfolio\web\package-lo
+ck.json
+
+Γû▓ Next.js 16.1.1 (Turbopack)
+
+  Creating an optimized production build ...
+Error: Cannot apply 
+unknown utility 
+class `selection:bg-w
+hite`. Are you using 
+CSS modules or 
+similar and missing 
+`@reference`? https:/
+/tailwindcss.com/docs
+/functions-and-direct
+ives#reference-direct
+ive
+    [2m[at 
+onInvalidCandidate (O
+:\portfolio\Portfolio
+\web\node_modules\tai
+lwindcss\dist\lib.js:
+21:1314)][0m
+    [2m[at Te (O:\po
+rtfolio\Portfolio\web
+\node_modules\tailwin
+dcss\dist\lib.js:16:3
+6652)][0m
+    [2m[at O:\portfo
+lio\Portfolio\web\nod
+e_modules\tailwindcss
+\dist\lib.js:21:355]
+[0m
+    [2m[at Rr (O:\po
+rtfolio\Portfolio\web
+\node_modules\tailwin
+dcss\dist\lib.js:3:17
+18)][0m
+    [2m[at _ (O:\por
+tfolio\Portfolio\web\
+node_modules\tailwind
+css\dist\lib.js:3:137
+7)][0m
+    [2m[at $e (O:\po
+rtfolio\Portfolio\web
+\node_modules\tailwin
+dcss\dist\lib.js:21:1
+72)][0m
+    [2m[at un (O:\po
+rtfolio\Portfolio\web
+\node_modules\tailwin
+dcss\dist\lib.js:38:2
+94)][0m
+    [2m[at process.p
+rocessTicksAndRejecti
+ons (node:internal/pr
+ocess/task_queues:105
+:5)][0m
+    [2m[at async cn 
+(O:\portfolio\Portfol
+io\web\node_modules\t
+ailwindcss\dist\lib.j
+s:38:631)][0m
+    [2m[at async Xr 
+(O:\portfolio\Portfol
+io\web\node_modules\@
+tailwindcss\node\dist
+\index.js:10:3417)][
+0m
+
+> Build error 
+occurred
+Error: Turbopack 
+build failed with 1 
+errors:
+./Portfolio/web/src/a
+pp/globals.css
+Error evaluating 
+Node.js code
+CssSyntaxError: 
+tailwindcss: O:\portf
+olio\Portfolio\web\sr
+c\app\globals.css:1:1
+: Cannot apply 
+unknown utility 
+class `selection:bg-w
+hite`. Are you using 
+CSS modules or 
+similar and missing 
+`@reference`? https:/
+/tailwindcss.com/docs
+/functions-and-direct
+ives#reference-direct
+ive
+    at Input.error (P
+ortfolio/web/node_mod
+ules/postcss/lib/inpu
+t.js:135:16) [O:\port
+folio\Portfolio\web\.
+next\build\chunks\321
+d0_53631478._.js:4651
+:22]
+    at Root.error (Po
+rtfolio/web/node_modu
+les/postcss/lib/node.
+js:146:32) [O:\portfo
+lio\Portfolio\web\.ne
+xt\build\chunks\321d0
+_53631478._.js:928:38
+]
+    [at Object.Once (
+O:\portfolio\Portfoli
+o\web\node_modules\@t
+ailwindcss\postcss\di
+st\index.js:10:6911)]
+    [at process.proce
+ssTicksAndRejections 
+(node:internal/proces
+s/task_queues:105:5)]
+    at async 
+LazyResult.runAsync (
+Portfolio/web/node_mo
+dules/postcss/lib/laz
+y-result.js:293:11) [
+O:\portfolio\Portfoli
+o\web\.next\build\chu
+nks\321d0_53631478._.
+js:6206:21]
+    at async 
+transform (turbopack:
+///[turbopack-node]/t
+ransforms/postcss.ts:
+70:34) [O:\portfolio\
+Portfolio\web\.next\b
+uild\chunks\[root-of-
+the-server]__de6fc41d
+._.js:146:36]
+    at async run (tur
+bopack:///[turbopack-
+node]/ipc/evaluate.ts
+:92:23) [O:\portfolio
+\Portfolio\web\.next\
+build\chunks\[root-of
+-the-server]__e61dfc1
+b._.js:443:31]
+
+Import trace:
+  Client Component 
+Browser:
+    ./Portfolio/web/s
+rc/app/globals.css 
+[Client Component 
+Browser]
+    ./Portfolio/web/s
+rc/app/layout.tsx 
+[Server Component]
+
+
+    at async 
+transform (turbopack:
+///[turbopack-node]/t
+ransforms/postcss.ts:
+70:34) [O:\portfolio\
+Portfolio\web\.next\b
+uild\chunks\[root-of-
+the-server]__de6fc41d
+._.js:146:36])
+    at async run (tur
+bopack:///[turbopack-
+node]/ipc/evaluate.ts
+:92:23) [O:\portfolio
+\Portfolio\web\.next\
+build\chunks\[root-of
+-the-server]__e61dfc1
+b._.js:443:31])
