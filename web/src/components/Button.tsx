@@ -12,12 +12,16 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             <button
                 ref={ref}
                 className={cn(
-                    "inline-flex items-center justify-center rounded-full font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none active:scale-95",
+                    "relative inline-flex items-center justify-center rounded-full font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2 focus:ring-offset-stone-950 disabled:opacity-50 disabled:pointer-events-none active:scale-95 overflow-hidden",
                     {
-                        "bg-white text-black hover:bg-zinc-200": variant === "primary",
-                        "bg-zinc-800 text-white hover:bg-zinc-700": variant === "secondary",
-                        "border border-white/20 text-white hover:bg-white/10 hover:border-white/40": variant === "outline",
-                        "text-zinc-400 hover:text-white hover:bg-white/5": variant === "ghost",
+                        // Primary - Orange gradient with glow
+                        "bg-gradient-to-r from-orange-500 via-amber-500 to-orange-400 text-stone-950 font-semibold shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:brightness-110": variant === "primary",
+                        // Secondary - Warm dark
+                        "bg-stone-800/80 text-orange-100 hover:bg-stone-700/80 border border-orange-500/20": variant === "secondary",
+                        // Outline - Orange border
+                        "border border-orange-500/30 text-orange-100 hover:bg-orange-500/10 hover:border-orange-500/50 backdrop-blur-sm": variant === "outline",
+                        // Ghost
+                        "text-orange-300/70 hover:text-orange-200 hover:bg-orange-500/10": variant === "ghost",
 
                         "text-xs px-4 py-2": size === "sm",
                         "text-sm px-6 py-3": size === "md",

@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className={cn(inter.variable, outfit.variable, "font-sans antialiased bg-background text-foreground min-h-screen flex flex-col")}>
+      <body className={cn(inter.variable, outfit.variable, "font-sans antialiased bg-background text-foreground min-h-screen flex flex-col")} suppressHydrationWarning>
         <Background />
         <Navbar />
         <main className="flex-grow">
