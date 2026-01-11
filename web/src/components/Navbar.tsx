@@ -4,9 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { cn } from "@/utils/cn";
 
-const navLinks = [
+const navItems = [
     { name: "Home", href: "#home" },
     { name: "About", href: "#about" },
     { name: "Projects", href: "#projects" },
@@ -14,16 +13,15 @@ const navLinks = [
 ];
 
 export function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState("home");
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
+            setIsScrolled(window.scrollY > 50);
 
-            // Determine active section
-            const sections = navLinks.map(link => link.href.replace("#", ""));
+            const sections = navItems.map(item => item.href.slice(1));
             for (const section of sections.reverse()) {
                 const element = document.getElementById(section);
                 if (element) {
@@ -35,105 +33,103 @@ export function Navbar() {
                 }
             }
         };
-        window.addEventListener("scroll", handleScroll);
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = "hidden";
-        } else {
-            document.body.style.overflow = "auto";
-        }
-    }, [isOpen]);
-
-    const handleLinkClick = () => {
-        setIsOpen(false);
-    };
-
     return (
-        <header
-            className={cn(
-                "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",
-                scrolled ? "glass h-16 border-orange-500/10" : "bg-transparent h-20"
-            )}
+        <motion.nav
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+                    ? "bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/5"
+                    : "bg-transparent"
+                }`}
         >
-            <nav className="mx-auto max-w-7xl px-6 md:px-12 h-full flex items-center justify-between">
-                {/* Logo */}
-                <Link href="#home" className="text-xl font-bold tracking-tight z-50 relative group">
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-200 via-amber-100 to-orange-300 group-hover:from-orange-100 group-hover:to-amber-200 transition-all duration-300">
-                        Patel Om
-                    </span>
-                </Link>
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="flex items-center justify-between h-16 md:h-20">
+                    {/* Logo */}
+                    <Link
+                        href="#home"
+                        className="text-xl font-bold text-white hover:text-purple-400 transition-colors"
+                    >
+                        OM<span className="text-purple-500">.</span>
+                    </Link>
 
-                {/* Desktop Nav */}
-                <div className="hidden md:flex items-center gap-10">
-                    {navLinks.map((link) => (
+                    {/* Desktop Navigation */}
+                    <div className="hidden md:flex items-center gap-1">
+                        {navItems.map((item) => (
+                            <Link
+                                key={item.name}
+                                href={item.href}
+                                className={`relative px-4 py-2 text-sm font-medium transition-colors ${activeSection === item.href.slice(1)
+                                        ? "text-white"
+                                        : "text-white/50 hover:text-white"
+                                    }`}
+                            >
+                                {item.name}
+                                {activeSection === item.href.slice(1) && (
+                                    <motion.div
+                                        layoutId="activeIndicator"
+                                        className="absolute bottom-0 left-4 right-4 h-0.5 bg-purple-500 rounded-full"
+                                        transition={{ duration: 0.3, ease: "easeOut" }}
+                                    />
+                                )}
+                            </Link>
+                        ))}
+                    </div>
+
+                    {/* CTA Button */}
+                    <div className="hidden md:block">
                         <Link
-                            key={link.href}
-                            href={link.href}
-                            className={cn(
-                                "text-sm font-medium transition-all duration-300 relative hover:text-orange-200",
-                                activeSection === link.href.replace("#", "")
-                                    ? "text-orange-100"
-                                    : "text-orange-300/60"
-                            )}
+                            href="#contact"
+                            className="px-5 py-2.5 text-sm font-medium text-white bg-purple-600 hover:bg-purple-500 rounded-xl transition-colors"
                         >
-                            {link.name}
-                            {activeSection === link.href.replace("#", "") && (
-                                <motion.div
-                                    layoutId="navbar-indicator"
-                                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-orange-500 to-amber-400 rounded-full shadow-lg shadow-orange-500/50"
-                                    initial={false}
-                                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                                />
-                            )}
+                            Get in Touch
                         </Link>
-                    ))}
+                    </div>
+
+                    {/* Mobile Menu Button */}
+                    <button
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        className="md:hidden p-2 text-white/60 hover:text-white transition-colors"
+                        aria-label="Toggle menu"
+                    >
+                        {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                    </button>
                 </div>
+            </div>
 
-                {/* Mobile Menu Button */}
-                <button
-                    className="md:hidden z-50 relative p-2 -mr-2 text-white hover:bg-white/10 rounded-full transition-colors"
-                    onClick={() => setIsOpen(!isOpen)}
-                    aria-label="Toggle menu"
-                >
-                    {isOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
-
-                {/* Mobile Nav Overlay */}
-                <AnimatePresence>
-                    {isOpen && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -20, filter: "blur(10px)" }}
-                            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                            exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
-                            transition={{ duration: 0.3, ease: "circOut" }}
-                            className="fixed inset-0 bg-stone-950/95 backdrop-blur-xl pt-32 px-6 md:hidden flex flex-col gap-8 z-40"
-                        >
-                            {navLinks.map((link, i) => (
-                                <motion.div
-                                    key={link.href}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.1 + i * 0.1 }}
+            {/* Mobile Menu */}
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="md:hidden bg-[#0a0a0f]/95 backdrop-blur-xl border-t border-white/5"
+                    >
+                        <div className="px-6 py-4 space-y-1">
+                            {navItems.map((item) => (
+                                <Link
+                                    key={item.name}
+                                    href={item.href}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className={`block px-4 py-3 rounded-lg text-base font-medium transition-colors ${activeSection === item.href.slice(1)
+                                            ? "bg-purple-500/20 text-purple-300"
+                                            : "text-white/60 hover:bg-white/5 hover:text-white"
+                                        }`}
                                 >
-                                    <Link
-                                        href={link.href}
-                                        onClick={handleLinkClick}
-                                        className={cn(
-                                            "text-4xl font-bold tracking-tight transition-colors block",
-                                            activeSection === link.href.replace("#", "") ? "text-orange-100" : "text-orange-400/50"
-                                        )}
-                                    >
-                                        {link.name}
-                                    </Link>
-                                </motion.div>
+                                    {item.name}
+                                </Link>
                             ))}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </nav>
-        </header>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.nav>
     );
 }

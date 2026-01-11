@@ -1,142 +1,187 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowLeft, ArrowRight, ChevronUp, ChevronDown, Play, Pause, SkipForward, Volume2, Sun, Moon, Plus, Minus, Check, Heart, Star, Bookmark, Share2 } from "lucide-react";
 
-const floatingItems = [
-    {
-        id: 1,
-        type: "button",
-        content: "Get Started",
-        className: "top-[15%] left-[10%] rotate-[-15deg]",
-        delay: 0,
-        parallaxFactor: 0.02,
-    },
-    {
-        id: 2,
-        type: "card",
-        content: "UI",
-        className: "top-[20%] right-[12%] rotate-[10deg]",
-        delay: 0.5,
-        parallaxFactor: 0.03,
-    },
-    {
-        id: 3,
-        type: "toggle",
-        className: "bottom-[30%] left-[8%] rotate-[5deg]",
-        delay: 1,
-        parallaxFactor: 0.025,
-    },
-    {
-        id: 4,
-        type: "slider",
-        className: "bottom-[25%] right-[10%] rotate-[-8deg]",
-        delay: 1.5,
-        parallaxFactor: 0.015,
-    },
-    {
-        id: 5,
-        type: "icon",
-        content: "◎",
-        className: "top-[40%] left-[5%] rotate-[20deg]",
-        delay: 2,
-        parallaxFactor: 0.035,
-    },
-    {
-        id: 6,
-        type: "badge",
-        content: "PRO",
-        className: "top-[35%] right-[6%] rotate-[-12deg]",
-        delay: 2.5,
-        parallaxFactor: 0.02,
-    },
-];
+interface FloatingUIElement {
+    id: number;
+    type: 'arrows' | 'slider' | 'toggle' | 'playback' | 'volume' | 'stepper' | 'checkbox' | 'like' | 'rating';
+    x: number;
+    y: number;
+    scale: number;
+    opacity: number;
+    delay: number;
+    blur?: boolean;
+}
 
 export function FloatingElements() {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [elements, setElements] = useState<FloatingUIElement[]>([]);
 
     useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            // Normalize mouse position relative to viewport center
-            const x = (e.clientX - window.innerWidth / 2) / window.innerWidth;
-            const y = (e.clientY - window.innerHeight / 2) / window.innerHeight;
-            setMousePosition({ x, y });
-        };
+        // Different sizes and opacities for depth effect
+        const configs: FloatingUIElement[] = [
+            // Far away (small, low opacity, blurred)
+            { id: 1, type: 'arrows', x: 3, y: 15, scale: 0.6, opacity: 0.3, delay: 0, blur: true },
+            { id: 2, type: 'toggle', x: 90, y: 25, scale: 0.5, opacity: 0.25, delay: 0.2, blur: true },
+            { id: 3, type: 'checkbox', x: 5, y: 80, scale: 0.55, opacity: 0.3, delay: 0.4, blur: true },
 
-        window.addEventListener("mousemove", handleMouseMove);
-        return () => window.removeEventListener("mousemove", handleMouseMove);
+            // Medium distance
+            { id: 4, type: 'slider', x: 8, y: 45, scale: 0.75, opacity: 0.45, delay: 0.6 },
+            { id: 5, type: 'volume', x: 85, y: 60, scale: 0.7, opacity: 0.4, delay: 0.8 },
+            { id: 6, type: 'like', x: 92, y: 40, scale: 0.8, opacity: 0.5, delay: 1.0 },
+
+            // Closer (larger, more visible)
+            { id: 7, type: 'playback', x: 75, y: 18, scale: 0.9, opacity: 0.6, delay: 1.2 },
+            { id: 8, type: 'stepper', x: 6, y: 65, scale: 0.85, opacity: 0.55, delay: 1.4 },
+            { id: 9, type: 'rating', x: 80, y: 78, scale: 0.9, opacity: 0.6, delay: 1.6 },
+
+            // Very close (large)
+            { id: 10, type: 'arrows', x: 2, y: 35, scale: 1.1, opacity: 0.7, delay: 1.8 },
+            { id: 11, type: 'slider', x: 88, y: 50, scale: 1.0, opacity: 0.65, delay: 2.0 },
+        ];
+        setElements(configs);
     }, []);
 
     return (
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {floatingItems.map((item) => (
+            {elements.map((el) => (
                 <motion.div
-                    key={item.id}
-                    className={`absolute ${item.className}`}
-                    initial={{ opacity: 0, y: 20, scale: 0.8 }}
+                    key={el.id}
+                    className="absolute"
+                    style={{
+                        left: `${el.x}%`,
+                        top: `${el.y}%`,
+                        filter: el.blur ? 'blur(1px)' : 'none',
+                    }}
+                    initial={{ opacity: 0, scale: el.scale * 0.8, y: 20 }}
                     animate={{
-                        opacity: [0.6, 0.85, 0.6],
-                        y: [0, -15, 0],
-                        scale: [1, 1.02, 1],
-                        x: mousePosition.x * 100 * item.parallaxFactor,
+                        opacity: el.opacity,
+                        scale: el.scale,
+                        y: [0, -8 * el.scale, 0],
                     }}
                     transition={{
-                        delay: item.delay,
-                        duration: 6,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        x: { duration: 0.3, ease: "easeOut" },
+                        opacity: { delay: el.delay, duration: 0.6 },
+                        scale: { delay: el.delay, duration: 0.6 },
+                        y: { delay: el.delay + 1, duration: 3 + el.id * 0.3, repeat: Infinity, ease: "easeInOut" },
                     }}
                 >
-                    {item.type === "button" && (
-                        <div className="relative px-6 py-3 rounded-full bg-white/15 backdrop-blur-md border border-white/30 text-white/80 text-sm font-medium shadow-2xl shadow-violet-500/20">
-                            {/* Glow effect */}
-                            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-500/20 to-blue-500/20 blur-xl -z-10" />
-                            {item.content}
-                        </div>
-                    )}
-
-                    {item.type === "card" && (
-                        <div className="relative w-20 h-24 rounded-2xl bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-md border border-white/30 flex items-center justify-center shadow-2xl shadow-blue-500/20">
-                            {/* Glow effect */}
-                            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 blur-xl -z-10" />
-                            <span className="text-white/70 text-2xl font-bold">{item.content}</span>
-                        </div>
-                    )}
-
-                    {item.type === "toggle" && (
-                        <div className="relative w-14 h-8 rounded-full bg-white/15 backdrop-blur-md border border-white/30 p-1 shadow-2xl shadow-green-500/20">
-                            {/* Glow effect */}
-                            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 blur-xl -z-10" />
-                            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-green-400/60 to-emerald-500/60 ml-auto shadow-lg shadow-green-500/30" />
-                        </div>
-                    )}
-
-                    {item.type === "slider" && (
-                        <div className="relative w-32 h-3 rounded-full bg-white/15 backdrop-blur-md border border-white/20 shadow-2xl shadow-cyan-500/20 overflow-hidden">
-                            {/* Glow effect */}
-                            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 blur-xl -z-10" />
-                            <div className="w-1/2 h-full bg-gradient-to-r from-cyan-400/50 to-blue-500/50 rounded-full" />
-                        </div>
-                    )}
-
-                    {item.type === "icon" && (
-                        <div className="relative w-12 h-12 rounded-xl bg-white/15 backdrop-blur-md border border-white/30 flex items-center justify-center text-white/70 text-xl shadow-2xl shadow-purple-500/20">
-                            {/* Glow effect */}
-                            <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 blur-xl -z-10" />
-                            {item.content}
-                        </div>
-                    )}
-
-                    {item.type === "badge" && (
-                        <div className="relative px-4 py-1.5 rounded-full bg-gradient-to-r from-violet-500/40 to-blue-500/40 backdrop-blur-md border border-white/30 text-white/90 text-xs font-bold shadow-2xl shadow-violet-500/30">
-                            {/* Glow effect */}
-                            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-violet-500/30 to-blue-500/30 blur-xl -z-10" />
-                            {item.content}
-                        </div>
-                    )}
+                    <UIElement type={el.type} />
                 </motion.div>
             ))}
         </div>
     );
+}
+
+function UIElement({ type }: { type: FloatingUIElement['type'] }) {
+    switch (type) {
+        case 'arrows':
+            return (
+                <div className="glass-card rounded-2xl p-3 flex items-center gap-2">
+                    <button className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white/70">
+                        <ArrowLeft className="w-4 h-4" />
+                    </button>
+                    <button className="w-8 h-8 rounded-lg bg-purple-500 flex items-center justify-center text-white">
+                        <ArrowRight className="w-4 h-4" />
+                    </button>
+                </div>
+            );
+
+        case 'slider':
+            return (
+                <div className="glass-card rounded-2xl p-3 w-32">
+                    <div className="text-xs text-white/40 mb-2">Opacity</div>
+                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                        <div className="h-full w-2/3 bg-gradient-to-r from-purple-500 to-violet-500 rounded-full" />
+                    </div>
+                </div>
+            );
+
+        case 'toggle':
+            return (
+                <div className="glass-card rounded-xl p-2 flex items-center gap-2">
+                    <Moon className="w-3 h-3 text-white/40" />
+                    <div className="w-10 h-5 bg-purple-500 rounded-full p-0.5 flex justify-end">
+                        <div className="w-4 h-4 bg-white rounded-full" />
+                    </div>
+                </div>
+            );
+
+        case 'playback':
+            return (
+                <div className="glass-card rounded-2xl p-2 flex items-center gap-1.5">
+                    <button className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center text-white/60">
+                        <Pause className="w-3 h-3" />
+                    </button>
+                    <button className="w-9 h-9 rounded-xl bg-purple-500 flex items-center justify-center text-white">
+                        <Play className="w-4 h-4 ml-0.5" />
+                    </button>
+                    <button className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center text-white/60">
+                        <SkipForward className="w-3 h-3" />
+                    </button>
+                </div>
+            );
+
+        case 'volume':
+            return (
+                <div className="glass-card rounded-xl p-2 flex items-center gap-2">
+                    <Volume2 className="w-3 h-3 text-purple-400" />
+                    <div className="flex gap-0.5">
+                        {[1, 2, 3, 4].map((i) => (
+                            <div
+                                key={i}
+                                className={`w-1 rounded-full ${i <= 2 ? 'bg-purple-500' : 'bg-white/20'}`}
+                                style={{ height: `${6 + i * 3}px` }}
+                            />
+                        ))}
+                    </div>
+                </div>
+            );
+
+        case 'stepper':
+            return (
+                <div className="glass-card rounded-xl p-2 flex items-center gap-1.5">
+                    <button className="w-6 h-6 rounded-md bg-white/10 flex items-center justify-center text-white/60">
+                        <Minus className="w-3 h-3" />
+                    </button>
+                    <span className="w-6 text-center text-white text-sm font-medium">8</span>
+                    <button className="w-6 h-6 rounded-md bg-purple-500 flex items-center justify-center text-white">
+                        <Plus className="w-3 h-3" />
+                    </button>
+                </div>
+            );
+
+        case 'checkbox':
+            return (
+                <div className="glass-card rounded-xl p-2 flex items-center gap-2">
+                    <div className="w-5 h-5 rounded-md bg-purple-500 flex items-center justify-center">
+                        <Check className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-xs text-white/60">Done</span>
+                </div>
+            );
+
+        case 'like':
+            return (
+                <div className="glass-card rounded-xl p-2 flex items-center gap-2">
+                    <Heart className="w-4 h-4 text-pink-500 fill-pink-500" />
+                    <span className="text-xs text-white/60">24</span>
+                </div>
+            );
+
+        case 'rating':
+            return (
+                <div className="glass-card rounded-xl p-2 flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                        <Star
+                            key={i}
+                            className={`w-3 h-3 ${i <= 4 ? 'text-yellow-400 fill-yellow-400' : 'text-white/20'}`}
+                        />
+                    ))}
+                </div>
+            );
+
+        default:
+            return null;
+    }
 }

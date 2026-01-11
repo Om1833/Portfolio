@@ -1,12 +1,11 @@
-
 "use client";
 
-import Link from "next/link";
-import { motion } from "framer-motion";
+import { Section } from "@/components/Section";
 import { Button } from "@/components/Button";
-import { HeroScene } from "@/components/3d/HeroScene";
+import { motion } from "framer-motion";
+import { ArrowUpRight, ArrowDown } from "lucide-react";
+import { SparklesCore } from "@/components/ui/sparkles";
 import { FloatingElements } from "@/components/FloatingElements";
-import { personalInfo } from "@/data/content";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -14,7 +13,7 @@ const containerVariants = {
         opacity: 1,
         transition: {
             staggerChildren: 0.15,
-            delayChildren: 0.3,
+            delayChildren: 0.2,
         },
     },
 };
@@ -30,69 +29,92 @@ const itemVariants = {
 
 export function Hero() {
     return (
-        <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-            <HeroScene />
+        <Section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden">
+            {/* Sparkles background */}
+            <div className="absolute inset-0 w-full h-full">
+                <SparklesCore
+                    id="hero-sparkles"
+                    background="transparent"
+                    minSize={0.4}
+                    maxSize={1.4}
+                    particleDensity={60}
+                    className="w-full h-full"
+                    particleColor="#a855f7"
+                    speed={0.6}
+                />
+            </div>
+
+            {/* Floating UI Elements */}
             <FloatingElements />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-stone-950/50 to-stone-950 pointer-events-none" />
 
             <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className="z-10 text-center px-4 max-w-5xl mx-auto space-y-8 relative"
+                className="relative z-10 text-center max-w-4xl mx-auto px-6"
             >
-                <motion.div
-                    variants={itemVariants}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-orange-500/20 text-sm font-medium text-orange-200/80 mb-4"
-                >
-                    <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse shadow-lg shadow-orange-500/50" />
-                    Available for freelance work
-                </motion.div>
-
+                {/* Name - Simple & Bold */}
                 <motion.h1
                     variants={itemVariants}
-                    className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-orange-100 via-amber-100 to-orange-300/50 pb-4"
+                    className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-purple-500 mb-8"
                 >
-                    {personalInfo.name.split(" ")[0]} {personalInfo.name.split(" ")[1]}
+                    Patel Om
                 </motion.h1>
 
-                <motion.p
-                    variants={itemVariants}
-                    className="text-xl md:text-2xl text-orange-200/60 max-w-2xl mx-auto leading-relaxed font-light"
-                >
-                    {personalInfo.role}. <br className="hidden md:block" />
-                    {personalInfo.tagline}.
-                </motion.p>
+                {/* Sparkle line under name */}
+                <motion.div variants={itemVariants} className="w-[30rem] max-w-full h-12 relative mx-auto mb-12">
+                    <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-purple-500 to-transparent h-[2px] w-3/4 blur-sm" />
+                    <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-purple-500 to-transparent h-px w-3/4" />
+                    <SparklesCore
+                        background="transparent"
+                        minSize={0.4}
+                        maxSize={1}
+                        particleDensity={600}
+                        className="w-full h-full"
+                        particleColor="#FFFFFF"
+                    />
+                    <div className="absolute inset-0 w-full h-full bg-[#0a0a0f] [mask-image:radial-gradient(300px_100px_at_top,transparent_20%,white)]"></div>
+                </motion.div>
 
+                {/* CTAs */}
                 <motion.div
                     variants={itemVariants}
-                    className="flex flex-col md:flex-row gap-6 justify-center items-center pt-8"
+                    className="flex flex-col sm:flex-row items-center justify-center gap-4"
                 >
-                    <Link href="#projects">
-                        <Button variant="primary" size="lg" className="w-full md:w-auto shadow-lg shadow-white/10">
-                            View Work
-                        </Button>
-                    </Link>
-                    <Link href="#contact">
-                        <Button variant="outline" size="lg" className="w-full md:w-auto">
-                            Contact Me
-                        </Button>
-                    </Link>
+                    <Button
+                        variant="primary"
+                        size="lg"
+                        onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                    >
+                        View Projects
+                        <ArrowUpRight className="w-5 h-5 ml-2" />
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="lg"
+                        onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                    >
+                        Get in Touch
+                    </Button>
                 </motion.div>
             </motion.div>
 
-            {/* Scroll Indicator */}
+            {/* Scroll indicator */}
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ delay: 1.5, duration: 0.8 }}
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce"
+                className="absolute bottom-10 left-1/2 -translate-x-1/2"
             >
-                <div className="w-6 h-10 rounded-full border-2 border-orange-500/30 flex justify-center p-1">
-                    <div className="w-1 h-3 bg-orange-400/60 rounded-full animate-scroll" />
-                </div>
+                <motion.div
+                    animate={{ y: [0, 8, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    className="flex flex-col items-center gap-2 text-white/40"
+                >
+                    <span className="text-xs uppercase tracking-widest">Scroll</span>
+                    <ArrowDown className="w-4 h-4" />
+                </motion.div>
             </motion.div>
-        </section>
+        </Section>
     );
 }
-

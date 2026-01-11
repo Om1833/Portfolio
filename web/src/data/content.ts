@@ -7,10 +7,10 @@ export const personalInfo = {
     email: "patelomok2@gmail.com",
     location: "Ahmedabad, India",
     socials: [
-        { name: "LinkedIn", href: "https://linkedin.com" },
-        { name: "Behance", href: "https://behance.net" },
-        { name: "Dribbble", href: "https://dribbble.com" },
-        { name: "GitHub", href: "https://github.com" },
+        { name: "LinkedIn", href: "https://www.linkedin.com/in/om-patel-3080b9368" },
+        { name: "Behance", href: "https://www.behance.net/calmvibes" },
+        { name: "Dribbble", href: "https://dribbble.com/patel1804/shots" },
+        { name: "GitHub", href: "https://github.com/Om1833" },
     ]
 };
 

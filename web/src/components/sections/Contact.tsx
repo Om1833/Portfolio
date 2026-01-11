@@ -1,10 +1,9 @@
-
 "use client";
 
 import { Section } from "@/components/Section";
 import { Button } from "@/components/Button";
 import { motion } from "framer-motion";
-import { Send, Mail, MapPin, ArrowUpRight } from "lucide-react";
+import { Send, Mail, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 import { useState, FormEvent, useRef } from "react";
 import emailjs from '@emailjs/browser';
@@ -37,12 +36,11 @@ export function Contact() {
             setError('');
             formRef.current.reset();
 
-            // Reset success message after 5 seconds
             setTimeout(() => {
                 setIsSubmitted(false);
             }, 5000);
         } catch (err) {
-            setError('Failed to send message. Please try again or email me directly.');
+            setError('Failed to send message. Please try again.');
             setIsSubmitted(false);
             console.error('EmailJS error:', err);
         } finally {
@@ -51,129 +49,84 @@ export function Contact() {
     };
 
     return (
-        <Section id="contact" className="border-t border-orange-500/10">
-            <div className="grid lg:grid-cols-2 gap-20">
+        <Section id="contact">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                 {/* Left Column - Info */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
-                    className="space-y-12"
+                    className="space-y-8"
                 >
                     <div>
-                        <h2 className="text-4xl md:text-6xl font-bold mb-6 font-heading tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-orange-100 to-amber-200">
-                            Let&apos;s work<br />together.
+                        <span className="text-sm font-medium text-purple-400 uppercase tracking-widest mb-4 block">
+                            Get in Touch
+                        </span>
+                        <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                            Let's work together
                         </h2>
-                        <p className="text-xl text-orange-200/60 leading-relaxed max-w-md">
-                            Have a project in mind? I&apos;d love to hear about it. Send me a message and let&apos;s create something amazing.
+                        <p className="text-lg text-white/50">
+                            Have a project in mind? I'd love to hear about it. Drop me a message and let's create something amazing.
                         </p>
                     </div>
 
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-50px" }}
-                        variants={{
-                            hidden: { opacity: 0 },
-                            visible: {
-                                opacity: 1,
-                                transition: { staggerChildren: 0.15 }
-                            }
-                        }}
-                        className="space-y-8"
-                    >
-                        <motion.div
-                            variants={{
-                                hidden: { opacity: 0, x: -20 },
-                                visible: { opacity: 1, x: 0, transition: { duration: 0.5 } }
-                            }}
-                            className="flex items-start gap-4"
-                        >
-                            <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center flex-shrink-0">
-                                <Mail className="w-5 h-5 text-zinc-400" />
+                    {/* Contact Info */}
+                    <div className="space-y-6">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-xl glass-purple flex items-center justify-center">
+                                <Mail className="w-5 h-5 text-purple-400" />
                             </div>
                             <div>
-                                <h3 className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-1">Email</h3>
-                                <a href={`mailto:${personalInfo.email}`} className="text-lg text-white hover:text-zinc-300 transition-colors">
-                                    {personalInfo.email}
-                                </a>
+                                <p className="text-sm text-white/40">Email</p>
+                                <p className="text-white font-medium">patelomok2@gmail.com</p>
                             </div>
-                        </motion.div>
-                        <motion.div
-                            variants={{
-                                hidden: { opacity: 0, x: -20 },
-                                visible: { opacity: 1, x: 0, transition: { duration: 0.5 } }
-                            }}
-                            className="flex items-start gap-4"
-                        >
-                            <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center flex-shrink-0">
-                                <MapPin className="w-5 h-5 text-zinc-400" />
-                            </div>
-                            <div>
-                                <h3 className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-1">Location</h3>
-                                <p className="text-lg text-white">Ahmedabad, Gujarat</p>
-                            </div>
-                        </motion.div>
-                        <motion.div
-                            variants={{
-                                hidden: { opacity: 0, x: -20 },
-                                visible: { opacity: 1, x: 0, transition: { duration: 0.5 } }
-                            }}
-                            className="flex items-start gap-4"
-                        >
-                            <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center flex-shrink-0">
-                                <Send className="w-5 h-5 text-zinc-400" />
-                            </div>
-                            <div>
-                                <h3 className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-1">Contact</h3>
-                                <p className="text-lg text-white">patelomok2@gmail.com</p>
-                                <p className="text-lg text-white">+91 8849862758</p>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.3, duration: 0.5 }}
-                        className="space-y-4"
-                    >
-                        <h3 className="text-sm font-medium text-zinc-500 uppercase tracking-wider">Follow Me</h3>
-                        <div className="flex flex-wrap gap-3">
-                            {personalInfo.socials.map((social, idx) => (
-                                <motion.div
-                                    key={social.name}
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    whileInView={{ opacity: 1, scale: 1 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: 0.4 + idx * 0.1, duration: 0.3 }}
-                                >
-                                    <Link
-                                        href={social.href}
-                                        target="_blank"
-                                        className="group flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900 border border-white/10 text-sm text-zinc-300 hover:bg-zinc-800 hover:border-white/20 hover:text-white transition-all duration-300"
-                                    >
-                                        {social.name}
-                                        <ArrowUpRight className="w-4 h-4 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                                    </Link>
-                                </motion.div>
-                            ))}
                         </div>
-                    </motion.div>
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-xl glass-purple flex items-center justify-center">
+                                <Phone className="w-5 h-5 text-purple-400" />
+                            </div>
+                            <div>
+                                <p className="text-sm text-white/40">Phone</p>
+                                <p className="text-white font-medium">+91 8849862758</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-xl glass-purple flex items-center justify-center">
+                                <MapPin className="w-5 h-5 text-purple-400" />
+                            </div>
+                            <div>
+                                <p className="text-sm text-white/40">Location</p>
+                                <p className="text-white font-medium">Ahmedabad, Gujarat</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Social Links */}
+                    <div className="flex gap-3">
+                        {personalInfo.socials.map((social) => (
+                            <Link
+                                key={social.name}
+                                href={social.href}
+                                target="_blank"
+                                className="px-4 py-2 rounded-full glass text-white/60 text-sm font-medium hover:bg-white/10 hover:text-white transition-colors"
+                            >
+                                {social.name}
+                            </Link>
+                        ))}
+                    </div>
                 </motion.div>
 
                 {/* Right Column - Form */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
+                    viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.2 }}
                 >
-                    <form ref={formRef} onSubmit={handleSubmit} className="space-y-6 p-8 rounded-3xl bg-stone-900/50 border border-orange-500/10 backdrop-blur-sm">
-                        <div suppressHydrationWarning>
-                            <label htmlFor="name" className="block text-sm font-medium text-orange-200/60 mb-2">
+                    <form ref={formRef} onSubmit={handleSubmit} className="space-y-6 p-8 glass-card rounded-2xl">
+                        <div>
+                            <label htmlFor="name" className="block text-sm font-medium text-white/60 mb-2">
                                 Your Name
                             </label>
                             <input
@@ -181,12 +134,12 @@ export function Contact() {
                                 name="from_name"
                                 type="text"
                                 required
-                                className="w-full bg-stone-950 border border-orange-500/20 rounded-xl px-4 py-4 text-orange-100 placeholder:text-orange-300/30 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent transition-all duration-300"
+                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                                 placeholder="John Doe"
                             />
                         </div>
-                        <div suppressHydrationWarning>
-                            <label htmlFor="email" className="block text-sm font-medium text-orange-200/60 mb-2">
+                        <div>
+                            <label htmlFor="email" className="block text-sm font-medium text-white/60 mb-2">
                                 Email Address
                             </label>
                             <input
@@ -194,12 +147,12 @@ export function Contact() {
                                 name="from_email"
                                 type="email"
                                 required
-                                className="w-full bg-stone-950 border border-orange-500/20 rounded-xl px-4 py-4 text-orange-100 placeholder:text-orange-300/30 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent transition-all duration-300"
+                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
                                 placeholder="john@example.com"
                             />
                         </div>
-                        <div suppressHydrationWarning>
-                            <label htmlFor="message" className="block text-sm font-medium text-orange-200/60 mb-2">
+                        <div>
+                            <label htmlFor="message" className="block text-sm font-medium text-white/60 mb-2">
                                 Your Message
                             </label>
                             <textarea
@@ -207,10 +160,14 @@ export function Contact() {
                                 name="message"
                                 required
                                 rows={5}
-                                className="w-full bg-stone-950 border border-orange-500/20 rounded-xl px-4 py-4 text-orange-100 placeholder:text-orange-300/30 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent transition-all duration-300 resize-none"
+                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-4 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none"
                                 placeholder="Tell me about your project..."
                             />
                         </div>
+
+                        {error && (
+                            <p className="text-red-400 text-sm">{error}</p>
+                        )}
 
                         <Button
                             type="submit"
@@ -221,7 +178,7 @@ export function Contact() {
                         >
                             {isSubmitting ? (
                                 <span className="flex items-center gap-2">
-                                    <span className="w-4 h-4 border-2 border-stone-900/30 border-t-stone-900 rounded-full animate-spin" />
+                                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                     Sending...
                                 </span>
                             ) : isSubmitted ? (
