@@ -113,13 +113,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
                 </div>
 
                 {/* Decorative gradient blob */}
-                <div className={`absolute -z-10 w-64 h-64 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 ${project.color.includes('violet') ? 'bg-violet-500' :
-                    project.color.includes('blue') ? 'bg-blue-500' :
-                        project.color.includes('emerald') ? 'bg-emerald-500' :
-                            project.color.includes('orange') ? 'bg-orange-500' :
-                                project.color.includes('pink') ? 'bg-pink-500' :
-                                    'bg-sky-500'
-                    } ${isEven ? '-bottom-20 -right-20' : '-bottom-20 -left-20'}`} />
+                <div className={`absolute -z-10 w-64 h-64 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 bg-orange-500 ${isEven ? '-bottom-20 -right-20' : '-bottom-20 -left-20'}`} />
             </div>
 
             {/* Content */}

@@ -69,8 +69,9 @@ export function Skills3D() {
         <div className="h-[400px] w-full relative">
             <Canvas camera={{ position: [0, 0, 6], fov: 45 }} dpr={[1, 2]}>
                 <Environment preset="city" />
-                <ambientLight intensity={0.5} />
-                <pointLight position={[10, 10, 10]} intensity={1} />
+                <ambientLight intensity={0.5} color="#fed7aa" />
+                <pointLight position={[10, 10, 10]} intensity={1} color="#f97316" />
+                <pointLight position={[-10, -10, -10]} intensity={0.5} color="#fbbf24" />
 
                 {skills.map((skill, idx) => (
                     <IconMesh

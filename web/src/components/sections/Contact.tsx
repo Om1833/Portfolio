@@ -6,7 +6,8 @@ import { Button } from "@/components/Button";
 import { motion } from "framer-motion";
 import { Send, Mail, MapPin, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useRef } from "react";
+import emailjs from '@emailjs/browser';
 import { personalInfo } from "@/data/content";
 
 export function Contact() {
@@ -14,36 +15,27 @@ export function Contact() {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [error, setError] = useState('');
 
+    const formRef = useRef<HTMLFormElement>(null);
+
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsSubmitting(true);
         setError('');
         setIsSubmitted(false);
 
-        const form = e.currentTarget; // Store form reference
-        const formData = new FormData(form);
-        const data = {
-            name: formData.get('name') as string,
-            email: formData.get('email') as string,
-            message: formData.get('message') as string,
-        };
+        if (!formRef.current) return;
 
         try {
-            const response = await fetch('/api/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to send message');
-            }
+            await emailjs.sendForm(
+                'service_pmjrswe',
+                'template_y009gff',
+                formRef.current,
+                'HEzgO24Z_U2tcHtHa'
+            );
 
             setIsSubmitted(true);
-            setError(''); // Clear any previous errors
-            form.reset(); // Use stored reference
+            setError('');
+            formRef.current.reset();
 
             // Reset success message after 5 seconds
             setTimeout(() => {
@@ -52,7 +44,7 @@ export function Contact() {
         } catch (err) {
             setError('Failed to send message. Please try again or email me directly.');
             setIsSubmitted(false);
-            console.error('Contact form error:', err);
+            console.error('EmailJS error:', err);
         } finally {
             setIsSubmitting(false);
         }
@@ -120,7 +112,23 @@ export function Contact() {
                             </div>
                             <div>
                                 <h3 className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-1">Location</h3>
-                                <p className="text-lg text-white">{personalInfo.location}</p>
+                                <p className="text-lg text-white">Ahmedabad, Gujarat</p>
+                            </div>
+                        </motion.div>
+                        <motion.div
+                            variants={{
+                                hidden: { opacity: 0, x: -20 },
+                                visible: { opacity: 1, x: 0, transition: { duration: 0.5 } }
+                            }}
+                            className="flex items-start gap-4"
+                        >
+                            <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-white/10 flex items-center justify-center flex-shrink-0">
+                                <Send className="w-5 h-5 text-zinc-400" />
+                            </div>
+                            <div>
+                                <h3 className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-1">Contact</h3>
+                                <p className="text-lg text-white">patelomok2@gmail.com</p>
+                                <p className="text-lg text-white">+91 8849862758</p>
                             </div>
                         </motion.div>
                     </motion.div>
@@ -163,14 +171,14 @@ export function Contact() {
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 0.6, delay: 0.2 }}
                 >
-                    <form onSubmit={handleSubmit} className="space-y-6 p-8 rounded-3xl bg-stone-900/50 border border-orange-500/10 backdrop-blur-sm">
+                    <form ref={formRef} onSubmit={handleSubmit} className="space-y-6 p-8 rounded-3xl bg-stone-900/50 border border-orange-500/10 backdrop-blur-sm">
                         <div suppressHydrationWarning>
                             <label htmlFor="name" className="block text-sm font-medium text-orange-200/60 mb-2">
                                 Your Name
                             </label>
                             <input
                                 id="name"
-                                name="name"
+                                name="from_name"
                                 type="text"
                                 required
                                 className="w-full bg-stone-950 border border-orange-500/20 rounded-xl px-4 py-4 text-orange-100 placeholder:text-orange-300/30 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent transition-all duration-300"
@@ -183,7 +191,7 @@ export function Contact() {
                             </label>
                             <input
                                 id="email"
-                                name="email"
+                                name="from_email"
                                 type="email"
                                 required
                                 className="w-full bg-stone-950 border border-orange-500/20 rounded-xl px-4 py-4 text-orange-100 placeholder:text-orange-300/30 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-transparent transition-all duration-300"

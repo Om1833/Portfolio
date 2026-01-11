@@ -39,8 +39,9 @@ export function HeroScene() {
         <div className="absolute inset-0 -z-10 h-full w-full overflow-hidden opacity-30 md:opacity-50 pointer-events-none">
             <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 2]}>
                 <Environment preset="city" />
-                <ambientLight intensity={0.5} />
-                <directionalLight position={[10, 10, 5]} intensity={1} />
+                <ambientLight intensity={0.5} color="#fed7aa" /> {/* Warm ambient light */}
+                <directionalLight position={[10, 10, 5]} intensity={1} color="#f97316" /> {/* Orange directional light */}
+                <pointLight position={[-10, -10, -5]} intensity={1} color="#fbbf24" /> {/* Amber back light */}
                 <Shape />
             </Canvas>
         </div>
